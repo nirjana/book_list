@@ -4,7 +4,9 @@ import axios from 'axios';
 
 const Book = props => ( 
   <tr>
+     <td>{props.book.bookname}</td>
     <td>{props.book.authorname}</td>
+    <td>{props.book.categoryname}</td>
     <td>{props.book.description}</td>
     <td>{props.book.duration}</td>
     <td>{props.book.date.substring(0,10)}</td>
@@ -55,10 +57,12 @@ export default class BooksList extends Component {
         <table className="table">
           <thead className="thead-light">
             <tr>
+            <th>BookName</th>
               <th>Authorname</th>
+              <th>Category</th>
               <th>Description</th>
-              <th>Duration</th>
-              <th>Date</th>
+              <th>price</th>
+              <th>Publication date</th>
               <th>Actions</th>
             </tr>
           </thead>

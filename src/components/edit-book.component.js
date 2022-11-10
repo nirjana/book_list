@@ -8,17 +8,23 @@ export default class EditBook extends Component {
     super(props);
 
     this.onChangeAuthorname = this.onChangeAuthorname.bind(this);
+    this.onChangeCategoryname = this.onChangeCategoryname.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeBookname = this.onChangeBookname.bind(this);
     this.onChangeDuration = this.onChangeDuration.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       authorname: '',
+      categoryname: '',
       description: '',
+      bookname: '',
       duration: 0,
       date: new Date(),
-      authors: []
+      authors: [],
+      categorys: [],
+     
     }
   }
 
@@ -27,7 +33,9 @@ export default class EditBook extends Component {
       .then(response => {
         this.setState({
           authorname: response.data.authorname,
+          categoryname: response.data.categoryname,
           description: response.data.description,
+         bookname: response.data.bookname,
           duration: response.data.duration,
           date: new Date(response.data.date)
         })   
@@ -48,20 +56,45 @@ export default class EditBook extends Component {
         console.log(error);
       })
 
+      
+    axios.get('http://localhost:5000/categorys/',{headers: {'Access-Control-Allow-Origin': '*'}})
+    .then(response => {
+      if (response.data.length > 0) {
+        this.setState({
+          categorys: response.data.map(category => category.categoryname),
+        })
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
+
   }
+
+
+  
 
   onChangeAuthorname(e) {
     this.setState({
       authorname: e.target.value
     })
   }
-
+  onChangeCategoryname(e) {
+    this.setState({
+      categoryname: e.target.value
+    })
+  }
   onChangeDescription(e) {
     this.setState({
       description: e.target.value
     })
   }
-
+  onChangeBookname(e) {
+    this.setState({
+     bookname: e.target.value
+    })
+  }
   onChangeDuration(e) {
     this.setState({
       duration: e.target.value
@@ -79,7 +112,9 @@ export default class EditBook extends Component {
 
     const book = {
       authorname: this.state.authorname,
+      categoryname: this.state.categoryname,
       description: this.state.description,
+      bookname: this.state.bookname,
       duration: this.state.duration,
       date: this.state.date
     }
@@ -114,6 +149,34 @@ export default class EditBook extends Component {
               }
           </select>
         </div>
+
+        <div className="form-group"> 
+<label>Categoryname: </label>
+<select ref="categoryInput"
+    required
+    className="form-control"
+    value={this.state.categoryname}
+    onChange={this.onChangeCategoryname}>
+    {
+      this.state.categorys.map(function(category) {
+        return <option 
+          key={category}
+          value={category}>{category}
+          </option>;
+      })
+    }
+</select>
+</div>
+
+<div className="form-group"> 
+          <label>Bookname: </label>
+          <input  type="text"
+              required
+              className="form-control"
+              value={this.state.bookname}
+              onChange={this.onChangeBookname}
+              />
+        </div>
         <div className="form-group"> 
           <label>Description: </label>
           <input  type="text"
@@ -124,7 +187,7 @@ export default class EditBook extends Component {
               />
         </div>
         <div className="form-group">
-          <label>Duration (in minutes): </label>
+          <label>Price: </label>
           <input 
               type="text" 
               className="form-control"
@@ -133,7 +196,7 @@ export default class EditBook extends Component {
               />
         </div>
         <div className="form-group">
-          <label>Date: </label>
+          <label>Publication Date: </label>
           <div>
             <DatePicker
               selected={this.state.date}
