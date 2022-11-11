@@ -8,17 +8,22 @@ export default class CreateBook extends Component {
     super(props);
 
     this.onChangeAuthorname = this.onChangeAuthorname.bind(this);
+    this.onChangeCategoryname= this.onChangeCategoryname.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeBookname = this.onChangeBookname.bind(this);
     this.onChangeDuration = this.onChangeDuration.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       authorname: '',
+      categoryname: '',
       description: '',
+      bookname: '',
       duration: 0,
       date: new Date(),
-      authors: []
+      authors: [],
+      categorys: []
     }
   }
 
@@ -36,6 +41,20 @@ export default class CreateBook extends Component {
         console.log(error);
       })
 
+
+    axios.get('http://localhost:5000/categorys/')
+      .then(response => {
+        if (response.data.length > 0) {
+          this.setState({
+            categorys: response.data.map(category => category.categoryname),
+            categoryname: response.data[0].categoryname
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
   }
 
   onChangeAuthorname(e) {
@@ -43,13 +62,21 @@ export default class CreateBook extends Component {
       authorname: e.target.value
     })
   }
-
+  onChangeCategoryname(e) {
+    this.setState({
+      categoryname: e.target.value
+    })
+  }
   onChangeDescription(e) {
     this.setState({
       description: e.target.value
     })
   }
-
+  onChangeBookname(e) {
+    this.setState({
+      bookname : e.target.value
+    })
+  }
   onChangeDuration(e) {
     this.setState({
       duration: e.target.value
@@ -67,7 +94,9 @@ export default class CreateBook extends Component {
 
     const book = {
       authorname: this.state.authorname,
+      categoryname: this.state.categoryname,
       description: this.state.description,
+      bookname: this.state.bookname,
       duration: this.state.duration,
       date: this.state.date
     }
@@ -85,22 +114,48 @@ export default class CreateBook extends Component {
     <div>
       <h3>Create New Book Log</h3>
       <form onSubmit={this.onSubmit}>
+      <div className="form-group"> 
+<label>Authorname: </label>
+<select ref="authorInput"
+    required
+    className="form-control"
+    value={this.state.authorname}
+    onChange={this.onChangeAuthorname}>
+    {
+      this.state.authors.map(function(author) {
+        return <option 
+          key={author}
+          value={author}>{author}
+          </option>;
+      })
+    }
+</select>
+</div>
         <div className="form-group"> 
-          <label>Authorname: </label>
-          <select ref="authorInput"
+        <label>Categoryname: </label>
+        <select ref="categoryInput"
+            required
+            className="form-control"
+            value={this.state.categoryname}
+            onChange={this.onChangeCategoryname}>
+            {
+              this.state.categorys.map(function(category) {
+                return <option 
+                  key={category}
+                  value={category}>{category}
+                  </option>;
+              })
+            }
+        </select>
+      </div>
+      <div className="form-group"> 
+          <label>Bookname: </label>
+          <input  type="text"
               required
               className="form-control"
-              value={this.state.authorname}
-              onChange={this.onChangeAuthorname}>
-              {
-                this.state.authors.map(function(author) {
-                  return <option 
-                    key={author}
-                    value={author}>{author}
-                    </option>;
-                })
-              }
-          </select>
+              value={this.state.bookname}
+              onChange={this.onChangeBookname}
+              />
         </div>
         <div className="form-group"> 
           <label>Description: </label>
@@ -111,8 +166,9 @@ export default class CreateBook extends Component {
               onChange={this.onChangeDescription}
               />
         </div>
+        
         <div className="form-group">
-          <label>Duration (in minutes): </label>
+          <label>Price: </label>
           <input 
               type="text" 
               className="form-control"
@@ -121,7 +177,7 @@ export default class CreateBook extends Component {
               />
         </div>
         <div className="form-group">
-          <label>Date: </label>
+          <label>Publication date: </label>
           <div>
             <DatePicker
               selected={this.state.date}

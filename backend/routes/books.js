@@ -9,14 +9,18 @@ router.route('/').get((req, res) => {
 
 router.route('/add').post((req, res) => {
   const authorname = req.body.authorname;
+  const categoryname = req.body.categoryname;
   const description = req.body.description;
+  const bookname = req.body.bookname;
   const duration = Number(req.body.duration);
   const date = Date.parse(req.body.date);
 
   const newBook = new Book({
     authorname,
+    categoryname,
     description,
     duration,
+    bookname,
     date,
   });
 
@@ -41,6 +45,8 @@ router.route('/update/:id').post((req, res) => {
   Book.findById(req.params.id)
     .then(book => {
       book.authorname = req.body.authorname;
+      book.categoryname = req.body.categoryname;
+      book.bookname= req.body.bookname;
       book.description = req.body.description;
       book.duration = Number(req.body.duration);
       book.date = Date.parse(req.body.date);

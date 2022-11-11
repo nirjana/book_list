@@ -7,6 +7,7 @@ import BooksList from "./components/books-list.component";
 import EditBook from "./components/edit-book.component";
 import CreateBook from "./components/create-book.component";
 import CreateAuthor from "./components/create-author.component";
+import CreateCategory from "./components/create-category.component";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/edit/:id" component={EditBook} />
       <Route path="/create" component={CreateBook} />
       <Route path="/author" component={CreateAuthor} />
+      <Route path="/category" component={CreateCategory} />
       </div>
     </Router>
   );
