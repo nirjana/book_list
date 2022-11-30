@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+// import { filterData, SearchType } from 'filter-data';
 
 const Book = props => ( 
   <tr>
-     <td>{props.book.bookname}</td>
+    <td  ><img width={80} src={'http://localhost:5000/uploads/'+props.book.image}/></td>
+    <td>{props.book.bookname}</td>
     <td>{props.book.authorname}</td>
     <td>{props.book.categoryname}</td>
     <td>{props.book.description}</td>
@@ -45,10 +47,21 @@ export default class BooksList extends Component {
   }
 
   bookList() {
+
+    this.state.books.sort((a,b) => a.bookname.toLowerCase()> b.bookname.toLowerCase() ? 1:-1) //use sort to assending order using A,B,C accordingly
+    this.state.books.filter(element => element.bookname === "AAaAA")
+
+
+    this.state.books.filter(item => {
+        return  item.bookname.includes('AAaAA')})
+  
     return this.state.books.map(currentbook => {
+      this.state.books.filter(item => {
+        return  item.bookname.includes('AAaAA')})
       return <Book book={currentbook} deleteBook={this.deleteBook} key={currentbook._id}/>;
     })
   }
+ 
 
   render() {
     return (
@@ -57,6 +70,7 @@ export default class BooksList extends Component {
         <table className="table">
           <thead className="thead-light">
             <tr>
+            <th>Image</th>
             <th>BookName</th>
               <th>Authorname</th>
               <th>Category</th>

@@ -13,6 +13,7 @@ export default class CreateBook extends Component {
     this.onChangeBookname = this.onChangeBookname.bind(this);
     this.onChangeDuration = this.onChangeDuration.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
+    this.onChangeImage = this.onChangeImage.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -23,7 +24,8 @@ export default class CreateBook extends Component {
       duration: 0,
       date: new Date(),
       authors: [],
-      categorys: []
+      categorys: [],
+      image:'',
     }
   }
 
@@ -72,6 +74,14 @@ export default class CreateBook extends Component {
       description: e.target.value
     })
   }
+
+  onChangeImage(e) {
+    console.log(e.target.files[0])
+    this.setState({
+      image: e.target.files[0]
+    })
+  }
+
   onChangeBookname(e) {
     this.setState({
       bookname : e.target.value
@@ -98,12 +108,28 @@ export default class CreateBook extends Component {
       description: this.state.description,
       bookname: this.state.bookname,
       duration: this.state.duration,
-      date: this.state.date
+      date: this.state.date,
+      image: this.state.image,
     }
 
-    console.log(book);
+    const formData = new FormData();
+    formData.append('authorname',this.state.authorname)
+    formData.append('categoryname',this.state.categoryname)
+    formData.append('description',this.state.description)
+    formData.append('bookname',this.state.bookname)
+    formData.append('duration',this.state.duration)
+    formData.append('date',this.state.date)
+    formData.append('image',this.state.image)
 
-    axios.post('http://localhost:5000/books/add', book)
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+
+    console.log(book.image);
+
+    axios.post('http://localhost:5000/books/add', formData,config)
       .then(res => console.log(res.data));
 
     window.location = '/';
@@ -113,7 +139,7 @@ export default class CreateBook extends Component {
     return (
     <div>
       <h3>Create New Book Log</h3>
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} method="post" encType="multipart/form-data">
       <div className="form-group"> 
 <label>Authorname: </label>
 <select ref="authorInput"
@@ -167,6 +193,16 @@ export default class CreateBook extends Component {
               />
         </div>
         
+        <div className="form-group"> 
+          <label>Image: </label>
+          <input  type="file"
+           
+              name="image"
+              className="form-control"
+              onChange={this.onChangeImage}
+              />
+        </div>
+
         <div className="form-group">
           <label>Price: </label>
           <input 

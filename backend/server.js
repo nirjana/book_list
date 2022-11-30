@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
+
 
 require('dotenv').config();
 
@@ -22,6 +24,7 @@ const booksRouter = require('./routes/books');
 const authorsRouter = require('./routes/author');
 const categorysRouter = require('./routes/category');
 
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 app.use('/books', booksRouter);
 app.use('/authors', authorsRouter);
 app.use('/categorys', categorysRouter);

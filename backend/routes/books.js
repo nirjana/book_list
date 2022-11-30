@@ -1,20 +1,42 @@
 const router = require('express').Router();
+const multer  = require('multer');
+// const upload = multer({ dest: 'uploads/' });
+
+const { v4 : uuidv4 } = require('uuid');
+const path = require("path");
 let Book = require('../models/book.model');
+
 
 router.route('/').get((req, res) => {
   Book.find()
     .then(books => res.json(books))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+var storage = multer.diskStorage({   
+  destination: function(req, file, cb) { 
+     cb(null, './uploads');    
+  }, 
+  filename: function (req, file, cb) { 
+     cb(null , file.originalname);   
+  }
+});
 
-router.route('/add').post((req, res) => {
+var upload = multer({ storage: storage });
+router.route('/add').post(upload.single("image"), (req, res) => {
+  console.log(req.file);
   const authorname = req.body.authorname;
   const categoryname = req.body.categoryname;
   const description = req.body.description;
   const bookname = req.body.bookname;
   const duration = Number(req.body.duration);
   const date = Date.parse(req.body.date);
+  const image = req.file.filename;
+  // const image = 123;
 
+  console.log(upload)
+
+
+  console.log(req.body,req.file, 37)
   const newBook = new Book({
     authorname,
     categoryname,
@@ -22,12 +44,16 @@ router.route('/add').post((req, res) => {
     duration,
     bookname,
     date,
+    image,
   });
+ 
 
   newBook.save()
   .then(() => res.json('Book added!'))
   .catch(err => res.status(400).json('Error: ' + err));
+
 });
+
 
 router.route('/:id').get((req, res) => {
   Book.findById(req.params.id)
@@ -57,5 +83,6 @@ router.route('/update/:id').post((req, res) => {
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
 
 module.exports = router;
