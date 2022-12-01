@@ -16,7 +16,7 @@ function App() {
       <Navbar />
       <br/>
       <Route path="/" exact component={BooksList} />
-      <Route path="/:id" component={EditBook} />
+      <Route path="/edit/:id" component={EditBook} />
       <Route path="/create" component={CreateBook} />
       <Route path="/author" component={CreateAuthor} />
       <Route path="/category" component={CreateCategory} />
