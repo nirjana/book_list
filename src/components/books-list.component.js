@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const Book = props => ( 
   <tr>
-    <td  ><img width={80} src={'http://localhost:5000/uploads/'+props.book.image}/></td>
+    <td  ><img width={80} src={'https://sujata-book-list.onrender.com/uploads/'+props.book.image}/></td>
     <td>{props.book.bookname}</td>
     <td>{props.book.authorname}</td>
     <td>{props.book.categoryname}</td>
@@ -28,7 +28,7 @@ export default class BooksList extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/books/',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://sujata-book-list.onrender.com/books/',{headers: {'Access-Control-Allow-Origin': '*'}})
       .then(response => {
         this.setState({ books: response.data })
       })
@@ -38,7 +38,7 @@ export default class BooksList extends Component {
   }
 
   deleteBook(id) {
-    axios.delete('http://localhost:5000/books/'+id)
+    axios.delete('https://sujata-book-list.onrender.com/books/'+id)
       .then(response => { console.log(response.data)});
 
     this.setState({
