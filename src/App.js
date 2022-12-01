@@ -15,11 +15,11 @@ function App() {
       <div className="container">
       <Navbar />
       <br/>
-      <Route path="https://sujata-book-list.onrender.com/" exact component={BooksList} />
-      <Route path="https://sujata-book-list.onrender.com/edit/:id" component={EditBook} />
-      <Route path="https://sujata-book-list.onrender.com/create" component={CreateBook} />
-      <Route path="https://sujata-book-list.onrender.com/author" component={CreateAuthor} />
-      <Route path="https://sujata-book-list.onrender.com/category" component={CreateCategory} />
+      <Route path="/" exact component={BooksList} />
+      <Route path="/:id" component={EditBook} />
+      <Route path="/create" component={CreateBook} />
+      <Route path="/author" component={CreateAuthor} />
+      <Route path="/category" component={CreateCategory} />
       </div>
     </Router>
   );
